@@ -24,14 +24,17 @@ jobs:
     - name: Build Blazor App
       run: dotnet publish -c Release -o build_output
 
-    - name: Configure AWS credentials
+   
+    - name: Assume role and configure AWS credentials
+      id: aws-credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
+        role-to-assume: LabRole
+        aws-region: us-east-1
+        role-session-name: github-actions
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-1
-        aws_session_token: IQoJb3JpZ2luX2VjEMn//////////wEaCXVzLXdlc3QtMiJHMEUCIAsmwTaNHqvRRYR2xjOMDSIC3bjGYX4ajEgT72c+YQPCAiEA2OR7Cn4/cwJ9EJJbzwrLdx/lbNxK+l6YDlp+oU+z15IqqAIIUhABGgwzODc2OTM1MDcyMDMiDHNsSwRTlxDD3Nz/myqFAkEAuJBjUd8294+AihX486iDMDL3oCaCBMBfD9KuPoU1d9y6Q7OQHSyaszUr7mbC8U4lVE8uvZcUrGtIh2IQMIw1g8gppIBkALiv744vdif97A1OyU9EjXlnX58fPMOMWS03FEiIH9JIskzUFPaiMsfcfWCMVq9qvCFOwSZs54KxLucJhzZ/QrB0eoqN5HIDBlLdWfizlbYLbHFseivfpwPnTF/ZqBIQLvc4RRGYrrYMIxBemvHBDH5HvtKMjzR6h9YokSSvTm19sldXyJ3flGcJ6XxOvHD5pmdkOkWBjpIt+CuGTLgWoHM5eBAMyRMgkEBUoGncxSyy5DlAEDhIyFOEjM9i3TDR5OmyBjqdAWuXgaU9uKJFyYi40Hpf7VgmVxSU5ukhFYBeQpdd2Eoy7mwqVqMUwFHvULihAN/PyiOWq0aCtM0p5JTHPu43r8E4tl+fdy8gW2jjswbwvwVI9C5/FjgOibqgVDFAA/3cfD56ou9K/t4wkB45YdzV/7ld8jbAJ/Tp/hzMVsrXTtHsAvHD9MIJUZY7cEExRSDmpaEiRG/SS8TCwRtwN1s=
-
+        
     - name: Deploy Blazor App to S3
       run: |
         aws s3 sync build_output/wwwroot s3://your-bucket-name --delete
