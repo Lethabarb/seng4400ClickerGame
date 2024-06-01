@@ -1,4 +1,4 @@
-name: Deploy to S3
+name: Deploy Project
 
 on:
   push:
@@ -13,6 +13,17 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
+    - name: Set up .NET Core
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '8.x'
+
+    - name: Restore .NET dependencies
+      run: dotnet restore
+
+    - name: Build Blazor App
+      run: dotnet publish -c Release -o build_output
+
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -20,6 +31,6 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
 
-    - name: Sync S3 bucket
+    - name: Deploy Blazor App to S3
       run: |
-        aws s3 sync . s3://your-bucket-name --delete
+        aws s3 sync build_output/wwwroot s3://your-bucket-name --delete
