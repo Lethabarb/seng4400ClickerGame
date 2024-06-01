@@ -38,4 +38,4 @@ jobs:
         
     - name: Deploy Blazor App to S3
       run: |
-        aws s3 sync build_output/wwwroot s3://your-bucket-name --delete
+        aws s3 sync build_output/wwwroot s3://seng4400-clicker-frontend --delete
