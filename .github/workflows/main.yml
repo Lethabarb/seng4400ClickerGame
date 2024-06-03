@@ -22,7 +22,7 @@ jobs:
       run: dotnet restore
 
     - name: Build Blazor App
-      run: dotnet publish ClickerGame/Frontend/Frontend.csproj -c Release -o build_output
+      run: dotnet publish Frontend/Frontend.csproj -c Release -o build_output
 
    
     - name: Assume role and configure AWS credentials
@@ -40,7 +40,7 @@ jobs:
         aws s3 sync build_output/wwwroot s3://seng4400-clicker-frontend --delete
 
     - name: Build Lambda function
-      run: dotnet publish ClickerGame/PostToDynamo/PostToDynamo.csproj -c Release -o lambda_build_output
+      run: dotnet publish PostToDynamo/PostToDynamo.csproj -c Release -o lambda_build_output
       
     - name: Package Lambda function
       run: |
