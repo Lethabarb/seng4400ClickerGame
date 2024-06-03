@@ -33,12 +33,22 @@ public class Function
     /// <param name="evnt">The event for the Lambda function handler to process.</param>
     /// <param name="context">The ILambdaContext that provides methods for logging and describing the Lambda environment.</param>
     /// <returns></returns>
-    public async Task FunctionHandler(SQSEvent evnt, ILambdaContext context)
+    public string HandleSQSEvent(SQSEvent sqsEvent, ILambdaContext context)
     {
-        foreach (var message in evnt.Records)
+        Console.WriteLine($"Beginning to process {sqsEvent.Records.Count} records...");
+
+        foreach (var record in sqsEvent.Records)
         {
-            await ProcessMessageAsync(message, context);
+            Console.WriteLine($"Message ID: {record.MessageId}");
+            Console.WriteLine($"Event Source: {record.EventSource}");
+
+            Console.WriteLine($"Record Body:");
+            Console.WriteLine(record.Body);
         }
+
+        Console.WriteLine("Processing complete.");
+
+        return $"Processed {sqsEvent.Records.Count} records.";
     }
 
     private async Task ProcessMessageAsync(SQSEvent.SQSMessage message, ILambdaContext context)
