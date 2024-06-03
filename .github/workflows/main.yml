@@ -38,3 +38,13 @@ jobs:
     - name: Deploy Blazor App to S3
       run: |
         aws s3 sync build_output/wwwroot s3://seng4400-clicker-frontend --delete
+
+    - name: Build and Deploy Lambda Functions
+      run: |
+        for function_dir in $(ls -d lambda-functions/*/); do
+          function_name=$(basename $function_dir)
+          cd $function_dir
+          dotnet lambda package --configuration Release --output-package bin/release/net6.0/$function_name.zip
+          aws lambda update-function-code --function-name $function_name --zip-file fileb://bin/release/net6.0/$function_name.zip
+          cd -
+        done
