@@ -1,18 +1,26 @@
-﻿@page "/counter"
+﻿@page "/"
+@using Amazon.SQS.Model
+@using Frontend.Services
+@inject IQueueService SqsService
 
-<PageTitle>Counter</PageTitle>
 
-<h1>Counter</h1>
+<button @onclick="SendMessage">Send Message</button>
 
-<p role="status">Current count: @currentCount</p>
-
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+<button @onclick="NextMessage">next message</button>
+<p>@message</p>
 
 @code {
-    private int currentCount = 0;
+    private string message;
 
-    private void IncrementCount()
+    private async Task SendMessage()
     {
-        currentCount++;
+        await SqsService.SendMessageAsync("gday gday");
+        message = string.Empty;
     }
+    private async Task NextMessage()
+    {
+        await SqsService.NextMessage();
+        message = SqsService.getMessage();
+    }
+
 }
