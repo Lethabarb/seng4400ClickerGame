@@ -22,7 +22,7 @@ jobs:
       run: dotnet restore
 
     - name: Build Blazor App
-      run: dotnet publish -c Release -o build_output
+      run: dotnet publish ClickerGame/Frontend/Frontend.csproj -c Release -o build_output
 
    
     - name: Assume role and configure AWS credentials
@@ -39,12 +39,17 @@ jobs:
       run: |
         aws s3 sync build_output/wwwroot s3://seng4400-clicker-frontend --delete
 
-    - name: Build and Deploy Lambda Functions
+    - name: Build Lambda function
+      run: dotnet publish ClickerGame/PostToDynamo/PostToDynamo.csproj -c Release -o lambda_build_output
+      
+    - name: Package Lambda function
       run: |
-        for function_dir in $(ls -d lambda-functions/*/); do
-          function_name=$(basename $function_dir)
-          cd $function_dir
-          dotnet lambda package --configuration Release --output-package bin/release/net6.0/$function_name.zip
-          aws lambda update-function-code --function-name $function_name --zip-file fileb://bin/release/net6.0/$function_name.zip
-          cd -
-        done
+        cd lambda_build_output
+        zip -r ../lambda_function.zip .
+        cd ..
+
+    - name: Deploy Lambda function
+      run: |
+        aws lambda update-function-code --function-name $Lambda1 --zip-file fileb://lambda_function.zip
+
+
