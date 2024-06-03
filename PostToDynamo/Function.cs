@@ -3,6 +3,7 @@ using Amazon.DynamoDBv2;
 using Amazon.Lambda.Core;
 using Amazon.Lambda.SQSEvents;
 using Newtonsoft.Json;
+using Amazon;
 
 
 // Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
@@ -33,7 +34,7 @@ public class Function
     /// <param name="evnt">The event for the Lambda function handler to process.</param>
     /// <param name="context">The ILambdaContext that provides methods for logging and describing the Lambda environment.</param>
     /// <returns></returns>
-    public string HandleSQSEvent(SQSEvent sqsEvent, ILambdaContext context)
+    public async Task<string> FunctionHandler(SQSEvent sqsEvent, ILambdaContext context)
     {
         Console.WriteLine($"Beginning to process {sqsEvent.Records.Count} records...");
 
@@ -44,6 +45,7 @@ public class Function
 
             Console.WriteLine($"Record Body:");
             Console.WriteLine(record.Body);
+            await ProcessMessageAsync(record, context);
         }
 
         Console.WriteLine("Processing complete.");
@@ -56,14 +58,15 @@ public class Function
         try
         {
             // Deserialize the SQS message body to a custom object
-            var myData = JsonConvert.DeserializeObject<PlayerSession>(message.Body);
+            //var myData = JsonConvert.DeserializeObject<PlayerSession>(message.Body);
 
             var item = new Dictionary<string, AttributeValue>
                 {
-                    { "Id", new AttributeValue { S = "testID"} },
-                    { "Name", new AttributeValue { S = "testName" } }, // Example attribute
-                    { "Score", new AttributeValue { N = "testScore" } } // Example attribute
+                    { "SessionId", new AttributeValue { S = message.Body} },
+                    { "Name", new AttributeValue { S = message.Body } }, // Example attribute
+                    { "Score", new AttributeValue { S = "10" } } // Example attribute
                 };
+            //context.Identity.IdentityId
 
             var request = new PutItemRequest
             {
