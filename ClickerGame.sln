@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Frontend", "Frontend\Fronte
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PostToDynamo", "PostToDynamo\PostToDynamo.csproj", "{4294C44C-A0C0-43DE-B620-50D8244B343B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PostToDynamo.Tests", "PostToDynamo.Tests\PostToDynamo.Tests.csproj", "{09E8D8FC-82EB-41FA-9152-D2C5ACFE1900}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,10 +21,6 @@ Global
 		{4294C44C-A0C0-43DE-B620-50D8244B343B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4294C44C-A0C0-43DE-B620-50D8244B343B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4294C44C-A0C0-43DE-B620-50D8244B343B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{09E8D8FC-82EB-41FA-9152-D2C5ACFE1900}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{09E8D8FC-82EB-41FA-9152-D2C5ACFE1900}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{09E8D8FC-82EB-41FA-9152-D2C5ACFE1900}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{09E8D8FC-82EB-41FA-9152-D2C5ACFE1900}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
