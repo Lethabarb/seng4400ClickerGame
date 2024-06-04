@@ -1,4 +1,4 @@
-# AWS Lambda Simple S3 Function Project
+# AWS Lambda Simple DynamoDB Function Project
 
 This starter project consists of:
 * Function.cs - class file containing a class with a single function handler method
@@ -6,9 +6,9 @@ This starter project consists of:
 
 You may also have a test project depending on the options selected.
 
-The generated function handler responds to events on an Amazon S3 bucket. The handler receives the bucket and object key details in an S3Event instance and returns the content type of the object as the function output. Replace the body of this method, and parameters, to suit your needs.
+The generated function handler responds to events on an Amazon DynamoDB stream and serializes the records to a JSON string which are written to the function's execution log. Replace the body of this method, and parameters, to suit your needs.
 
-After deploying your function you must configure an Amazon S3 bucket as an event source to trigger your Lambda function.
+After deploying your function you must configure an Amazon DynamoDB stream as an event source to trigger your Lambda function.
 
 ## Here are some steps to follow from Visual Studio:
 
@@ -40,12 +40,12 @@ If already installed check if new version is available.
 
 Execute unit tests
 ```
-    cd "BackendFunctions/test/BackendFunctions.Tests"
+    cd "SimpleDynamoDBFunction/test/SimpleDynamoDBFunction.Tests"
     dotnet test
 ```
 
 Deploy function to AWS Lambda
 ```
-    cd "BackendFunctions/src/BackendFunctions"
+    cd "SimpleDynamoDBFunction/src/SimpleDynamoDBFunction"
     dotnet lambda deploy-function
 ```

@@ -3,24 +3,16 @@
 @using Frontend.Services
 @inject IQueueService SqsService
 
+<h1>Clicker Game</h1>
 
-<button @onclick="SendMessage">Send Message</button>
-
-<button @onclick="NextMessage">next message</button>
-<p>@message</p>
+<h2>@currentCount</h2>
+<button @onclick="Count">Click me</button>
 
 @code {
-    private string message;
+    public int currentCount = 0;
 
-    private async Task SendMessage()
-    {
-        await SqsService.SendMessageAsync("gday gday");
-        message = string.Empty;
-    }
-    private async Task NextMessage()
-    {
-        await SqsService.NextMessage();
-        message = SqsService.getMessage();
+    private async Task Count() {
+        currentCount++;
     }
 
 }
