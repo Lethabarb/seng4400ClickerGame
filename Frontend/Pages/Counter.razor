@@ -21,17 +21,18 @@
     public int currentCount = 0;
     public string name;
 
-    protected override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
         name = gameService.getName();
         Console.WriteLine(name);
         Console.WriteLine(gameService.getSessionId());
-        return base.OnInitializedAsync();
+        await leaderboard.getPositions();
     }
 
     private async Task Count() {
         currentCount++;
         await gameService.IncrementScore();
+        await leaderboard.getPositions();
     }
 
 }

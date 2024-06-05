@@ -8,14 +8,24 @@ namespace Frontend.Services
     public class LeaderboardService
     {
         HttpClient client;
-        public List<LeaderboardPosition> positions;
+        public List<LeaderboardPosition> positions = new List<LeaderboardPosition> {
+        new LeaderboardPosition {Name = "-", Score = 0},
+        new LeaderboardPosition {Name = "-", Score = 0},
+        new LeaderboardPosition {Name = "-", Score = 0},
+        new LeaderboardPosition {Name = "-", Score = 0},
+        new LeaderboardPosition {Name = "-", Score = 0},
+        new LeaderboardPosition {Name = "-", Score = 0},
+        new LeaderboardPosition {Name = "-", Score = 0},
+        new LeaderboardPosition {Name = "-", Score = 0},
+        new LeaderboardPosition {Name = "-", Score = 0},
+        new LeaderboardPosition {Name = "-", Score = 0}
+        };
         public LeaderboardService() {
             client = new HttpClient();
             client.BaseAddress = new Uri("https://4cd8xnayn7.execute-api.us-east-1.amazonaws.com");
-            Thread t = new Thread(new ThreadStart(getPositions));
         }
 
-        public async void getPositions()
+        public async Task getPositions()
         {
             while (true)
             {
@@ -23,6 +33,7 @@ namespace Frontend.Services
                 Stream receiveStream = await res.Content.ReadAsStreamAsync();
                 StreamReader readStream = new StreamReader(receiveStream, Encoding.UTF8);
                 var json = readStream.ReadToEnd();
+                Console.WriteLine(json);
                 positions = JsonConvert.DeserializeObject<List<LeaderboardPosition>>(json);
             }
         }

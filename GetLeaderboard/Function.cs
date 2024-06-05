@@ -3,6 +3,7 @@ using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
 using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.DynamoDBv2.Model;
+using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
 using Frontend.Models;
 using Newtonsoft.Json;
@@ -17,11 +18,12 @@ public class Function
     private static readonly AmazonDynamoDBClient dynamoDbClient = new AmazonDynamoDBClient();
     private static readonly string tableName = "PlayerSessions"; // Replace with your DynamoDB table name
 
-    public async Task<List<LeaderboardPosition>> FunctionHandler(ILambdaContext context)
+    public async Task<APIGatewayProxyResponse> FunctionHandler(APIGatewayProxyRequest request, ILambdaContext context)
     {
         List<string> attributes = new List<string> { "Name", "Score" };
         ScanResponse res = await dynamoDbClient.ScanAsync(tableName, attributes);
         //string output = JsonConvert.SerializeObject(res.Items);
+        List<LeaderboardPosition> allPositions = new List<LeaderboardPosition>();
         List<LeaderboardPosition> positions = new List<LeaderboardPosition>();
 
         DynamoDBContext dBContext = new DynamoDBContext(dynamoDbClient);
@@ -29,21 +31,26 @@ public class Function
         {
             var doc = Document.FromAttributeMap(item);
             var myModel = dBContext.FromDocument<LeaderboardPosition>(doc);
-            positions.Add(myModel);
+            allPositions.Add(myModel);
         }
         positions.Sort(new ScoreComparer());
         if (positions.Count > 10)
         {
-            List<LeaderboardPosition> top10 = positions.GetRange(0, 10);
-            return top10;
-
-        } else
+            positions = allPositions.GetRange(0, 10);
+        } 
+        else
         {
-            for (int i = positions.Count - 1; i < 10; i++)
+            for (int i = allPositions.Count - 1; i < 10; i++)
             {
-                positions.Add(new LeaderboardPosition { Name = "-", Score = 0 });
+                allPositions.Add(new LeaderboardPosition { Name = "-", Score = 0 });
             }
-            return positions;
+            positions = allPositions;
         }
+        var response = new APIGatewayProxyResponse
+        {
+            StatusCode = 200,
+            Body = JsonConvert.SerializeObject(positions),
+            Headers = new Dictionary<string, string> { { "Content-Type", "text/plain" } }
+        };
     }
 }
