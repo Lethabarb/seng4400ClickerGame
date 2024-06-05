@@ -33,7 +33,7 @@ public class Function
             var myModel = dBContext.FromDocument<LeaderboardPosition>(doc);
             allPositions.Add(myModel);
         }
-        positions.Sort(new ScoreComparer());
+        allPositions.Sort(new ScoreComparer());
         if (positions.Count > 10)
         {
             positions = allPositions.GetRange(0, 10);
