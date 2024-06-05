@@ -52,5 +52,6 @@ public class Function
             Body = JsonConvert.SerializeObject(positions),
             Headers = new Dictionary<string, string> { { "Content-Type", "text/plain" } }
         };
+        return response;
     }
 }
