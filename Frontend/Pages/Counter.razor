@@ -12,7 +12,7 @@
 <button @onclick="Count">Click me</button>
 
 <ol>
-    @foreach (LeaderboardPosition pos in leaderboard.positions) {
+    @foreach (LeaderboardPosition pos in positions) {
         <li>@pos.Score (@pos.Name)</li>
     }
 </ol>
@@ -20,6 +20,7 @@
 @code {
     public int currentCount = 0;
     public string name;
+    private List<LeaderboardPosition> positions = new List<LeaderboardPosition>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -27,12 +28,15 @@
         Console.WriteLine(name);
         Console.WriteLine(gameService.getSessionId());
         await leaderboard.getPositions();
+        positions = leaderboard.getBoard();
     }
 
     private async Task Count() {
         currentCount++;
         await gameService.IncrementScore();
+        // await leaderboard.getPositions();
         await leaderboard.getPositions();
+        positions = leaderboard.getBoard();
     }
 
 }

@@ -4,6 +4,8 @@ using Amazon.Lambda.Core;
 using Amazon.Lambda.SQSEvents;
 using Newtonsoft.Json;
 using Amazon;
+using Amazon.DynamoDBv2.DataModel;
+using Amazon.SQS.Model;
 
 
 // Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
@@ -37,6 +39,10 @@ public class Function
     public async Task<string> FunctionHandler(SQSEvent sqsEvent, ILambdaContext context)
     {
         Console.WriteLine($"Beginning to process {sqsEvent.Records.Count} records...");
+        DynamoDBContext DBContext = new DynamoDBContext(dynamoDbClient);
+
+        var BatchPut = DBContext.CreateBatchWrite<PlayerSession>();
+        List<PlayerSession> Sessions = new List<PlayerSession>();
 
         foreach (var record in sqsEvent.Records)
         {
@@ -45,9 +51,14 @@ public class Function
 
             Console.WriteLine($"Record Body:");
             Console.WriteLine(record.Body);
-            await ProcessMessageAsync(record, context);
+            PlayerSession session = JsonConvert.DeserializeObject<PlayerSession>(record.Body);
+            Sessions.Add(session);
+
+            //await ProcessMessageAsync(record, context);
         }
 
+        BatchPut.AddPutItems(Sessions);
+        await BatchPut.ExecuteAsync();
         Console.WriteLine("Processing complete.");
 
         return $"Processed {sqsEvent.Records.Count} records.";
@@ -68,11 +79,11 @@ public class Function
                 };
             //context.Identity.IdentityId
 
-            var request = new PutItemRequest
-            {
-                TableName = tableName,
-                Item = item
-            };
+            //var request = new PutItemRequest
+            //{
+            //    TableName = tableName,
+            //    Item = item
+            //};
 
             var response = await dynamoDbClient.PutItemAsync(request);
 
