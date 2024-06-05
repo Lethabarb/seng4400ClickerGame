@@ -58,13 +58,13 @@ public class Function
         try
         {
             // Deserialize the SQS message body to a custom object
-            //var myData = JsonConvert.DeserializeObject<PlayerSession>(message.Body);
+            var myData = JsonConvert.DeserializeObject<PlayerSession>(message.Body);
 
             var item = new Dictionary<string, AttributeValue>
                 {
-                    { "SessionId", new AttributeValue { S = message.Body} },
-                    { "Name", new AttributeValue { S = message.Body } }, // Example attribute
-                    { "Score", new AttributeValue { S = "10" } } // Example attribute
+                    { "SessionId", new AttributeValue { S = myData.Id} },
+                    { "Score", new AttributeValue { N = myData.Score.ToString() } }, // Example attribute
+                    { "Name", new AttributeValue { S = myData.Name } } // Example attribute
                 };
             //context.Identity.IdentityId
 
