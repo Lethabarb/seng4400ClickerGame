@@ -1,18 +1,28 @@
-﻿@page "/"
+﻿@page "/play"
 @using Amazon.SQS.Model
-@using Frontend.Services
-@inject IQueueService SqsService
+@using Frontend.Services.Interfaces
+@inject IGameService gameService
 
-<h1>Clicker Game</h1>
+<h1>Clicker Game: @name</h1>
 
 <h2>@currentCount</h2>
 <button @onclick="Count">Click me</button>
 
 @code {
     public int currentCount = 0;
+    public string name;
+
+    protected override Task OnInitializedAsync()
+    {
+        name = gameService.getName();
+        Console.WriteLine(name);
+        Console.WriteLine(gameService.getSessionId());
+        return base.OnInitializedAsync();
+    }
 
     private async Task Count() {
         currentCount++;
+        await gameService.IncrementScore();
     }
 
 }

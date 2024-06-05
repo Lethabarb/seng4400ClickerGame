@@ -1,8 +1,12 @@
 using Amazon.SQS;
 using Frontend;
 using Frontend.Services;
+using Frontend.Services.Interfaces;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.AspNetCore.Http;
+using System.Net;
 
 public class Program
 {
@@ -12,7 +16,19 @@ public class Program
         builder.RootComponents.Add<App>("#app");
         builder.RootComponents.Add<HeadOutlet>("head::after");
 
-        builder.Services.AddTransient<IQueueService, QueueService>();
+        builder.Services.Configure<CookiePolicyOptions>(options =>
+        {
+            options.CheckConsentNeeded = context => true;
+            options.MinimumSameSitePolicy = SameSiteMode.None;
+        });
+        builder.Services.AddHttpContextAccessor();
+
+        builder.Services.AddSingleton<IQueueService, QueueService>();
+        builder.Services.AddSingleton<IGameService, GameService>();
+        //builder.Services.AddTransient<ICookieService, CookieService>();
+
+
+
 
         builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
         await builder.Build().RunAsync();

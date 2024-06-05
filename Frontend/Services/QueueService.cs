@@ -6,6 +6,7 @@ using Amazon.SecurityToken.Model;
 using Amazon.SQS;
 using Amazon.SQS.Model;
 using Frontend.Models;
+using Frontend.Services.Interfaces;
 using System.Net.WebSockets;
 using System.Text;
 using System.Xml;

@@ -1,0 +1,33 @@
+﻿@page "/"
+@using Frontend.Models
+@using Frontend.Services.Interfaces
+@inject IGameService gameService
+@inject NavigationManager NavManager
+<h3>Clicker Game</h3>
+
+<EditForm Model="playerSession" OnSubmit="HandleSubmit">
+    <label>Name</label>
+    <input required @bind-value=playerSession.Name type="text" />
+    <button type="submit">Play game</button>
+</EditForm>
+
+@code {
+    PlayerSessionInput playerSession;
+
+    protected override Task OnInitializedAsync()
+    {
+        playerSession = new PlayerSessionInput();
+        return base.OnInitializedAsync();
+    }
+
+
+    public void HandleSubmit()
+    {
+        Console.WriteLine(gameService.getSessionId());
+        Console.WriteLine(playerSession.Name);
+        gameService.setName(playerSession.Name);
+        Console.WriteLine(gameService.getName());
+        NavManager.NavigateTo("/play");
+
+    }
+}

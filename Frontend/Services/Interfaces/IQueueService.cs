@@ -1,7 +1,7 @@
 ﻿using Amazon.SQS.Model;
 using Frontend.Models;
 
-namespace Frontend.Services
+namespace Frontend.Services.Interfaces
 {
     public interface IQueueService
     {
