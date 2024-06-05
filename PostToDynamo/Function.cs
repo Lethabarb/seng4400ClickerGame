@@ -41,7 +41,7 @@ public class Function
         Console.WriteLine($"Beginning to process {sqsEvent.Records.Count} records...");
         DynamoDBContext DBContext = new DynamoDBContext(dynamoDbClient);
 
-        var BatchPut = DBContext.CreateBatchWrite<PlayerSession>();
+        var BatchPut = DBContext.CreateBatchWrite<PlayerSession>(new DynamoDBOperationConfig() { OverrideTableName = "PlayerSessions" });
         List<PlayerSession> Sessions = new List<PlayerSession>();
 
         foreach (var record in sqsEvent.Records)
