@@ -85,7 +85,7 @@ public class Function
             //    Item = item
             //};
 
-            var response = await dynamoDbClient.PutItemAsync(request);
+            //var response = await dynamoDbClient.PutItemAsync(request);
 
             context.Logger.LogLine($"Successfully inserted record with Id: Test");
         }
