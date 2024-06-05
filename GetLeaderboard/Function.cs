@@ -34,7 +34,7 @@ public class Function
             allPositions.Add(myModel);
         }
         allPositions.Sort(new ScoreComparer());
-        if (positions.Count > 10)
+        if (allPositions.Count > 10)
         {
             positions = allPositions.GetRange(0, 10);
         } 
