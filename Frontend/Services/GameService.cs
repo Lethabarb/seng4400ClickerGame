@@ -13,12 +13,12 @@ namespace Frontend.Services
         {
             Console.WriteLine("started game service");
             Session = new PlayerSession();
-            Console.WriteLine(Session.Id);
+            Console.WriteLine(Session.SessionId);
             this.sqs = sqs;
         }
         public string getSessionId()
         {
-            return Session.Id;
+            return Session.SessionId;
         }
         public void setName(string name)
         {

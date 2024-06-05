@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Amazon;
 using Amazon.DynamoDBv2.DataModel;
 using Amazon.SQS.Model;
+using Frontend.Models;
 
 
 // Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
@@ -73,7 +74,7 @@ public class Function
 
             var item = new Dictionary<string, AttributeValue>
                 {
-                    { "SessionId", new AttributeValue { S = myData.Id} },
+                    { "SessionId", new AttributeValue { S = myData.SessionId} },
                     { "Score", new AttributeValue { N = myData.Score.ToString() } }, // Example attribute
                     { "Name", new AttributeValue { S = myData.Name } } // Example attribute
                 };
@@ -95,10 +96,4 @@ public class Function
         }
     }
 
-    private class PlayerSession
-    {
-        public string Id { get; set; }
-        public string Name { get; set; }
-        public int Score { get; set; }
-    }
 }

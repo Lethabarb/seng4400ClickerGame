@@ -21,4 +21,7 @@
     <PackageReference Include="AWSSDK.SQS" Version="3.7.301.11" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Frontend\Frontend.csproj" />
+  </ItemGroup>
 </Project>
