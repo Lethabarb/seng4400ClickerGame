@@ -24,13 +24,22 @@ jobs:
     - name: Build Blazor App
       run: dotnet publish Frontend/Frontend.csproj -c Release -o build_output
 
-    - name: Build Lambda function
-      run: dotnet publish PostToDynamo/PostToDynamo.csproj -c Release -r linux-x64 -o lambda_build_output
+    - name: Build Lambda - Post to Dynamo
+      run: dotnet publish PostToDynamo/PostToDynamo.csproj -c Release -r linux-x64 -o lambda_build_output_post_to_dynamo
+
+    - name: Build Lambda - Process Leaderboard
+      run: dotnet publish PostToDynamo/PostToDynamo.csproj -c Release -r linux-x64 -o lambda_build_output_process_leaderboard
       
-    - name: Package Lambda function
+    - name: Package Lambda - Post to Dynamo
       run: |
-        cd lambda_build_output
-        zip -r ../lambda_function.zip .
+        cd lambda_build_output_post_to_dynamo
+        zip -r ../lambda_function_post_to_dynamo.zip .
+        cd ..
+
+    - name: Package Lambda - Process Leaderboard
+      run: |
+        cd lambda_build_output_process_leaderboard
+        zip -r ../lambda_function_process_leaderboard.zip .
         cd ..
    
     - name: Configure AWS credentials
@@ -48,8 +57,12 @@ jobs:
         aws s3 sync build_output/wwwroot s3://seng4400-clicker-frontend --delete
 
 
-    - name: Deploy Lambda function
+    - name: Deploy Lambda - Post to Dynamo
       run: |
-        aws lambda update-function-code --function-name Lambda1 --zip-file fileb://lambda_function.zip
+        aws lambda update-function-code --function-name Lambda1 --zip-file fileb://lambda_function_post_to_dynamo.zip
+
+    - name: Deploy Lambda - Process Leaderboard
+      run: |
+        aws lambda update-function-code --function-name ProcessLeaderboard --zip-file fileb://lambda_function_process_leaderboard.zip
 
 
