@@ -1,12 +1,21 @@
 ﻿@page "/play"
 @using Amazon.SQS.Model
+@using Frontend.Models
+@using Frontend.Services
 @using Frontend.Services.Interfaces
 @inject IGameService gameService
+@inject LeaderboardService leaderboard
 
 <h1>Clicker Game: @name</h1>
 
 <h2>@currentCount</h2>
 <button @onclick="Count">Click me</button>
+
+<ol>
+    @foreach (LeaderboardPosition pos in leaderboard.positions) {
+        <li>@pos.Score (@pos.Name)</li>
+    }
+</ol>
 
 @code {
     public int currentCount = 0;

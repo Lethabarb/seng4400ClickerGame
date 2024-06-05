@@ -25,6 +25,7 @@ public class Program
 
         builder.Services.AddSingleton<IQueueService, QueueService>();
         builder.Services.AddSingleton<IGameService, GameService>();
+        builder.Services.AddSingleton<LeaderboardService>();
         //builder.Services.AddTransient<ICookieService, CookieService>();
 
 
