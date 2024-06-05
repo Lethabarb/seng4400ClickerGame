@@ -28,7 +28,7 @@ jobs:
       run: dotnet publish PostToDynamo/PostToDynamo.csproj -c Release -r linux-x64 -o lambda_build_output_post_to_dynamo
 
     - name: Build Lambda - Process Leaderboard
-      run: dotnet publish PostToDynamo/PostToDynamo.csproj -c Release -r linux-x64 -o lambda_build_output_process_leaderboard
+      run: dotnet publish GetLeaderboard/GetLeaderboard.csproj -c Release -r linux-x64 -o lambda_build_output_process_leaderboard
       
     - name: Package Lambda - Post to Dynamo
       run: |
